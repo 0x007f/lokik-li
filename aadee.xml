@@ -1,5 +1,7 @@
 <QueryList>
   <Query Id="0" Path="Security">
+    <!-- AD Global & Universal Security Groups (Domain Admins, Enterprise Admins jne.) -->
+    <Select Path="Security">*[System[(EventID=4728 or EventID=4729 or EventID=4756 or EventID=4757)]]</Select>
     <!-- Kerberos TGT (4768), TGS (4769), Pre-Auth Fail (4771), NTLM (4776), DS Changes (5136) -->
     <Select Path="Security">*[System[(EventID=4768 or EventID=4769 or EventID=4771 or EventID=4776 or EventID=5136)]]</Select>
     <!-- DCSync: 4662 rajattuna Control Access -oikeuteen (0x100). Tarkempi GUID-suodatus SIEM:ssä -->
