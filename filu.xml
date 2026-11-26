@@ -1,0 +1,7 @@
+<QueryList>
+  <Query Id="0" Path="Security">
+    <!-- Jakoihin pääsy (5140) ja epäonnistuneet tarkat haut (5145 Failure) -->
+    <Select Path="Security">*[System[(EventID=5140)]]</Select>
+    <Select Path="Security">*[System[(EventID=5145) and (band(Keywords,4503599627370496))]]</Select>
+  </Query>
+</QueryList>
