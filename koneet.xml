@@ -11,21 +11,17 @@
     <Select Path="Microsoft-Windows-Bits-Client/Operational">*[System[(EventID=59 or EventID=60)]]</Select>
   </Query>
 
-  <Query Id="3" Path="Microsoft-Windows-TerminalServices-LocalSessionManager/Operational">
-    <Select Path="Microsoft-Windows-TerminalServices-LocalSessionManager/Operational">*[System[(EventID=21 or EventID=22 or EventID=23 or EventID=24 or EventID=25)]]</Select>
-  </Query>
-
-  <Query Id="4" Path="Microsoft-Windows-DriverFrameworks-UserMode/Operational">
+  <Query Id="3" Path="Microsoft-Windows-DriverFrameworks-UserMode/Operational">
     <!-- USB-laitteiden kytkennät -->
     <Select Path="Microsoft-Windows-DriverFrameworks-UserMode/Operational">*[System[(EventID=2003 or EventID=2100 or EventID=2101 or EventID=2102)]]</Select>
   </Query>
 
-  <Query Id="5" Path="Security">
+  <Query Id="4" Path="Security">
     <!-- Windows Firewall: Vain estetyt yhteydet (5157) + USB-tiedostosiirrot (4663) -->
     <Select Path="Security">*[System[(EventID=5157 or EventID=4663)]]</Select>
   </Query>
 
-  <Query Id="6" Path="Microsoft-Windows-WinRM/Operational">
+  <Query Id="5" Path="Microsoft-Windows-WinRM/Operational">
     <Select Path="Microsoft-Windows-WinRM/Operational">*[System[(EventID=6 or EventID=91 or EventID=169)]]</Select>
   </Query>
 </QueryList>
