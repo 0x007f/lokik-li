@@ -1,0 +1,11 @@
+<QueryList>
+  <Query Id="0" Path="Microsoft-Windows-DNSServer/Analytical">
+    <!-- DNS-kyselyt ja vastaukset (ETW) -->
+    <Select Path="Microsoft-Windows-DNSServer/Analytical">*[System[(EventID=256 or EventID=257 or EventID=258 or EventID=259 or EventID=260 or EventID=261)]]</Select>
+  </Query>
+
+  <Query Id="1" Path="Microsoft-Windows-DNSServer/Audit">
+    <!-- Vyöhyke- ja tietuemuutokset -->
+    <Select Path="Microsoft-Windows-DNSServer/Audit">*[System[(EventID &gt;= 515 and EventID &lt;= 582)]]</Select>
+  </Query>
+</QueryList>
