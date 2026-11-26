@@ -1,0 +1,6 @@
+<QueryList>
+  <Query Id="0" Path="Security">
+    <!-- Sertifikaattipyynnöt (4886), myönnetyt sertifikaatit (4887) ja template-muutokset (4898) -->
+    <Select Path="Security">*[System[(EventID=4886 or EventID=4887 or EventID=4898)]]</Select>
+  </Query>
+</QueryList>
