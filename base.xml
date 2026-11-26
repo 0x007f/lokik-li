@@ -2,19 +2,19 @@
   <Query Id="0" Path="Security">
     <!-- Kirjautumiset, Explicit Creds (4648), Admin-oikeudet (4672), RDP-istunnot -->
     <Select Path="Security">*[System[(EventID=4624 or EventID=4625 or EventID=4648 or EventID=4672 or EventID=4778 or EventID=4779)]]</Select>
-    <!-- Tunnus- ja ryhmähallinta -->
+    <!-- Paikallinen tunnus- ja ryhmähallinta -->
     <Select Path="Security">*[System[(EventID=4720 or EventID=4722 or EventID=4724 or EventID=4725 or EventID=4726 or EventID=4732 or EventID=4733 or EventID=4741)]]</Select>
     <!-- Prosessien luonti (vaatii GPO: Include command line) -->
     <Select Path="Security">*[System[(EventID=4688)]]</Select>
     <!-- Ajastetut tehtävät täydellä XML-sisällöllä -->
     <Select Path="Security">*[System[(EventID=4698 or EventID=4702)]]</Select>
-    <!-- Lokien tyhjennys, uudet palvelut, auditointipolitiikan muutos -->
-    <Select Path="Security">*[System[(EventID=1102 or EventID=4697 or EventID=4719)]]</Select>
+    <!-- Lokien tyhjennys, uudet palvelut, auditointipolitiikka, kellonaika (4616), jaot (5142, 5144) -->
+    <Select Path="Security">*[System[(EventID=1102 or EventID=4616 or EventID=4697 or EventID=4719 or EventID=5142 or EventID=5144)]]</Select>
   </Query>
 
   <Query Id="1" Path="System">
-    <!-- Uudet palvelut (7045), palvelun tilamuutos (7040), lokin tyhjennys (104) -->
-    <Select Path="System">*[System[(EventID=7045 or EventID=7040 or EventID=104)]]</Select>
+    <!-- Palvelut (7045, 7040), lokin tyhjennys (104), käynnistykset ja sammutukset (1074, 6005, 6006, 6008) -->
+    <Select Path="System">*[System[(EventID=104 or EventID=1074 or EventID=6005 or EventID=6006 or EventID=6008 or EventID=7040 or EventID=7045)]]</Select>
   </Query>
 
   <Query Id="2" Path="Microsoft-Windows-PowerShell/Operational">
@@ -23,8 +23,8 @@
   </Query>
 
   <Query Id="3" Path="Microsoft-Windows-Sysmon/Operational">
-    <!-- Prosessit (1), Verkko (3), Ajurit (6), Injektio (8,10), Tiedostot & MOTW (11,15), Rekisteri (12-14), WMI-pysyvyys (19-21), DNS (22) -->
-    <Select Path="Microsoft-Windows-Sysmon/Operational">*[System[(EventID=1 or EventID=3 or EventID=6 or EventID=8 or EventID=10 or EventID=11 or EventID=12 or EventID=13 or EventID=14 or EventID=15 or EventID=19 or EventID=20 or EventID=21 or EventID=22)]]</Select>
+    <!-- Prosessit (1), Verkko (3), Ajurit (6), Injektio (8,10), Tiedostot/MOTW (11,15), Rekisteri (12-14), Named Pipes (17,18), WMI (19-21), DNS (22), Tampering (25) -->
+    <Select Path="Microsoft-Windows-Sysmon/Operational">*[System[(EventID=1 or EventID=3 or EventID=6 or EventID=8 or EventID=10 or EventID=11 or EventID=12 or EventID=13 or EventID=14 or EventID=15 or EventID=17 or EventID=18 or EventID=19 or EventID=20 or EventID=21 or EventID=22 or EventID=25)]]</Select>
   </Query>
 
   <Query Id="4" Path="Microsoft-Windows-TaskScheduler/Operational">
@@ -40,43 +40,48 @@
   </Query>
 
   <Query Id="7" Path="Microsoft-Windows-TerminalServices-RemoteConnectionManager/Operational">
-    <!-- RDP-lähde-IP ennen istunnon muodostumista -->
+    <!-- Saapuvan RDP-yhteyden lähde-IP -->
     <Select Path="Microsoft-Windows-TerminalServices-RemoteConnectionManager/Operational">*[System[(EventID=1149)]]</Select>
   </Query>
 
-  <Query Id="8" Path="Microsoft-Windows-NTLM/Operational">
+  <Query Id="8" Path="Microsoft-Windows-TerminalServices-RDPClient/Operational">
+    <!-- Lähtevät RDP-yhteydet (lateraalinen liike lähdekoneelta) -->
+    <Select Path="Microsoft-Windows-TerminalServices-RDPClient/Operational">*[System[(EventID=1024 or EventID=1102)]]</Select>
+  </Query>
+
+  <Query Id="9" Path="Microsoft-Windows-NTLM/Operational">
     <!-- NTLM-autentikoinnit (Pass-the-Hash) -->
     <Select Path="Microsoft-Windows-NTLM/Operational">*[System[(EventID=8004)]]</Select>
   </Query>
 
   <!-- LISÄARVOLÄHTEET (MATALA MELU, AKTIIVISET) -->
 
-  <Query Id="9" Path="Windows PowerShell">
-    <!-- PowerShell v2 -downgrade-hyökkäykset (lisää halutessasi EventID=800 pipeline-lokitukseen) -->
+  <Query Id="10" Path="Windows PowerShell">
+    <!-- PowerShell v2 -downgrade-hyökkäykset -->
     <Select Path="Windows PowerShell">*[System[(EventID=400 or EventID=600)]]</Select>
   </Query>
 
-  <Query Id="10" Path="Microsoft-Windows-CodeIntegrity/Operational">
+  <Query Id="11" Path="Microsoft-Windows-CodeIntegrity/Operational">
     <!-- Allekirjoittamattomat/haavoittuvat ajurit (BYOVD) ja WDAC -->
     <Select Path="Microsoft-Windows-CodeIntegrity/Operational">*[System[(EventID=3001 or EventID=3002 or EventID=3004 or EventID=3033 or EventID=3076 or EventID=3077)]]</Select>
   </Query>
 
-  <Query Id="11" Path="Microsoft-Windows-LSA/Operational">
+  <Query Id="12" Path="Microsoft-Windows-LSA/Operational">
     <!-- LSASS-suojauksen (RunAsPPL) tila ja estetyt DLL-lataukset -->
     <Select Path="Microsoft-Windows-LSA/Operational">*</Select>
   </Query>
 
-  <Query Id="12" Path="Microsoft-Windows-Windows Firewall With Advanced Security/Firewall">
+  <Query Id="13" Path="Microsoft-Windows-Windows Firewall With Advanced Security/Firewall">
     <!-- Palomuurisääntöjen lisäykset, muokkaukset ja poistot -->
     <Select Path="Microsoft-Windows-Windows Firewall With Advanced Security/Firewall">*[System[(EventID=2004 or EventID=2005 or EventID=2006)]]</Select>
   </Query>
 
   <!-- OPTIONAALISET LÄHTEET (POISTA KOMMENTIT AKTIVOIDAKSESI)
-  <Query Id="13" Path="Microsoft-Windows-SMBServer/Security">
+  <Query Id="14" Path="Microsoft-Windows-SMBServer/Security">
     <Select Path="Microsoft-Windows-SMBServer/Security">*</Select>
   </Query>
 
-  <Query Id="14" Path="Microsoft-Windows-SMBClient/Security">
+  <Query Id="15" Path="Microsoft-Windows-SMBClient/Security">
     <Select Path="Microsoft-Windows-SMBClient/Security">*</Select>
   </Query>
   -->
